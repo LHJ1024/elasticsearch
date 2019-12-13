@@ -1,6 +1,8 @@
 package com.springboot.elasticsearch;
 
 import com.springboot.elasticsearch.bean.Article;
+import com.springboot.elasticsearch.bean.Book;
+import com.springboot.elasticsearch.repository.BookRepository;
 import io.searchbox.client.JestClient;
 import io.searchbox.core.Delete;
 import io.searchbox.core.Index;
@@ -20,6 +22,9 @@ import java.io.IOException;
 public class ElasticsearchApplicationTests {
     @Autowired
     JestClient jestClient;
+
+    @Autowired
+    BookRepository bookRepository;
 //这个是直接创建了index和带有文档内容
     @Test
     public void contextLoads() {
@@ -68,6 +73,18 @@ public class ElasticsearchApplicationTests {
             e.printStackTrace();
         }
 
+    }
+    //使用spring-data 整合es
+    @Test
+    public void  test01(){
+//		Book book = new Book();
+//		book.setId(1);
+//		book.setBookName("西游记");
+//		book.setAuthor("吴承恩");
+//		bookRepository.index(book);
+        for (Book book : bookRepository.findByBookNameLike("游")) {
+            System.out.println(book);
+        }
     }
 
 }
