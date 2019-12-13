@@ -13,6 +13,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
@@ -25,7 +27,10 @@ public class ElasticsearchApplicationTests {
 
     @Autowired
     BookRepository bookRepository;
-//这个是直接创建了index和带有文档内容
+    @Autowired
+    JavaMailSenderImpl javaMailSender;
+
+    //这个是直接创建了index和带有文档内容
     @Test
     public void contextLoads() {
         Article article = new Article();
@@ -42,7 +47,8 @@ public class ElasticsearchApplicationTests {
         }
 
     }
-//查询符合hellodoc内容
+
+    //查询符合hellodoc内容
     @Test
     public void search() {
         String json = "{\n" +
@@ -60,7 +66,8 @@ public class ElasticsearchApplicationTests {
             e.printStackTrace();
         }
     }
-//删除文档根据文档Id
+
+    //删除文档根据文档Id
     @Test
     public void delete() {
 
@@ -74,9 +81,10 @@ public class ElasticsearchApplicationTests {
         }
 
     }
+
     //使用spring-data 整合es
     @Test
-    public void  test01(){
+    public void test01() {
 //		Book book = new Book();
 //		book.setId(1);
 //		book.setBookName("西游记");
@@ -87,4 +95,18 @@ public class ElasticsearchApplicationTests {
         }
     }
 
+    @Test
+    public void mailtest01() {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("通知，今天下午不上班");
+        message.setText("今天下午去办理签证，到天河区软件路13号2楼政务中心办理");
+        message.setTo("18875143382@163.com");
+        message.setFrom("541534048@qq.com");
+        javaMailSender.send(message);
+    }
+
+    @Test
+    public void mailtest02() {
+
+    }
 }
