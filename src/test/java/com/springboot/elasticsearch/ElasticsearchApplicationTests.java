@@ -9,14 +9,17 @@ import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 import org.junit.Test;
+import java.io.File;
 //import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 
 @RunWith(SpringRunner.class)
@@ -106,7 +109,23 @@ public class ElasticsearchApplicationTests {
     }
 
     @Test
-    public void mailtest02() {
+    public void mailtest02() throws  Exception{
+        //1、创建一个复杂的消息邮件
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+
+        //邮件设置
+        helper.setSubject("通知-今晚开会");
+        helper.setText("<b style='color:red'>今天 7:30 开会</b>",true);
+
+        helper.setTo("18875143382@163.com");
+        helper.setFrom("541534048@qq.com");
+
+        //上传文件
+        helper.addAttachment("1.jpg",new File("E:\\学习\\素材文件\\1.jpg"));
+        helper.addAttachment("2.jpg",new File("E:\\学习\\素材文件\\2.jpg"));
+
+        javaMailSender.send(mimeMessage);
 
     }
 }
